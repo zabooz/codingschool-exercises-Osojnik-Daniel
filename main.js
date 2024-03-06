@@ -53,37 +53,55 @@ import {animationStart} from './scripte.js';
     
     certbtns.forEach((btn) => {
         btn.addEventListener('click', () => {
-            // Array mit den Pfaden zu den Bildern
-            const ImgArray = ['./img/Zeugnis Abendschule1-1.png','./img/Zeugnis Abendschule2-1.png','./img/Zeugnis Abendschule3-1.png','./img/Zeugnis Abendschule4-1.png','./img/Zeugnis Hauptschule-1.png']
-            
-            // Erstelle ein Popup für die Zeugnisse
-            const slideShow = document.createElement('div')
+            // Arrays mit den Pfaden zu den Bildern
+            const imgArrayA = ['./img/Zeugnis Abendschule1-1.png',
+                              './img/Zeugnis Abendschule2-1.png',
+                              './img/Zeugnis Abendschule3-1.png',
+                              './img/Zeugnis Abendschule4-1.png']
+            const imgArrayB = ['./img/Zeugnis Hauptschule-1.png']
+
+
+
+
+            // bestimme das array und erste bild was verwendet werden soll
+            let array;
+            btn.parentNode.textContent === 'Abendschule' ? array = [...imgArrayA]
+                                                         : array = [...imgArrayB]
+                                    
             const image = document.createElement('img');
-            image.src = ImgArray[0]
+            image.src = array[0]
+
+
+            // close btn
             const closeBtn = document.createElement('button')
             closeBtn.textContent= 'X'
             closeBtn.classList.add('slideShowCloseBtn');
-            
-            // schließt popup
             closeBtn.addEventListener('click', () => {
                 slideShow.remove();
                 main.classList.remove('blur')
             })
-            
-            // slider um zwischen den zeugnissen zu switchen
-            const slider = document.createElement('input')
-            slider.type = 'range';
-            slider.min = 0;
-            slider.max = 3;
-            slider.value = 0;
-            slider.addEventListener('input', () => {
-                image.src= ImgArray[slider.value]
-            })
-            
-            // Füge die Elemente zum Popup hinzu
-            slideShow.append(closeBtn,image,slider)
+
+
+            //füge erstelle und füge slideshow elemente hinzu
+            const slideShow = document.createElement('div')
             slideShow.classList.add('slideShow')
-            slideShow.append(slider)
+            slideShow.append(closeBtn,image)
+
+            
+            if(array.length>1){
+                // slider um zwischen den zeugnissen zu switchen
+                const slider = document.createElement('input')
+                slider.type = 'range';
+                slider.min = 0;
+                slider.max = array.length - 1
+                slider.value = 0;
+                slider.addEventListener('input', () => {
+                    image.src= array[slider.value]
+                })
+                slideShow.append(slider)
+            }
+
+            // popUp wird der Seite hinzugefügt und hintergrund wird geblurrt
             body.appendChild(slideShow)
             main.classList.add('blur')
         })
